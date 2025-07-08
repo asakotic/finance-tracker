@@ -27,10 +27,13 @@ public class JwtFilter extends OncePerRequestFilter {
     private String secretKey;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain)
-            throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+
+        if (request.getServletPath().equals("/users/login") ||
+                request.getServletPath().equals("/users/register")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         String authHeader = request.getHeader("Authorization");
 

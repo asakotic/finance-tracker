@@ -1,27 +1,23 @@
 package finance_tracker.rs.controller;
 
-import finance_tracker.rs.configuration.JwtUtil;
 import finance_tracker.rs.model.User;
 import finance_tracker.rs.model.dto.AuthResponse;
 import finance_tracker.rs.model.dto.UserDto;
 import finance_tracker.rs.service.UserService;
-import org.springframework.context.annotation.Role;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 @CrossOrigin
 public class UserController {
 
     private final UserService userService;
-    private final JwtUtil jwtUtil;
 
-    public UserController(UserService userService, JwtUtil jwtUtil) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.jwtUtil = jwtUtil;
     }
 
     @GetMapping("/{username}")

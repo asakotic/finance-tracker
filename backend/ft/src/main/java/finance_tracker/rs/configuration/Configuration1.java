@@ -1,6 +1,7 @@
 package finance_tracker.rs.configuration;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -17,13 +18,13 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 
-@org.springframework.context.annotation.Configuration
+@Configuration
 @EnableWebSecurity
-public class Configuration {
+public class Configuration1 {
     private JwtFilter jwtFilter;
     private AuthenticationProvider authenticationProvider;
 
-    public Configuration(JwtFilter jwtFilter, AuthenticationProvider authenticationProvider) {
+    public Configuration1(JwtFilter jwtFilter, AuthenticationProvider authenticationProvider) {
         this.jwtFilter = jwtFilter;
         this.authenticationProvider = authenticationProvider;
     }
@@ -31,21 +32,23 @@ public class Configuration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                .cors(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers( "/users/login").permitAll()
-                        .requestMatchers( "/users/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/users/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/users/login").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS).permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                ).authenticationProvider(authenticationProvider)
+                )
+                .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
     }
+
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
