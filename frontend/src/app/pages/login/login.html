@@ -1,0 +1,34 @@
+<div class="auth-container">
+  <mat-card class="auth-card">
+    <div class="auth-header">
+      <h1 class="auth-title">Welcome Back</h1>
+      <p class="auth-subtitle">Please enter your credentials</p>
+    </div>
+
+    <form class="auth-form">
+      <mat-form-field appearance="outline" class="auth-input">
+        <mat-label>Email Address</mat-label>
+        <input matInput type="email" placeholder="your@email.com">
+        <mat-icon matPrefix>mail_outline</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="auth-input">
+        <mat-label>Password</mat-label>
+        <input matInput [type]="hidePassword ? 'password' : 'text'" placeholder="••••••••">
+        <mat-icon matPrefix>lock_outline</mat-icon>
+        <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
+          <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" class="auth-button">
+        Sign In
+        <mat-icon>arrow_forward</mat-icon>
+      </button>
+
+      <div class="auth-footer">
+        <a class="auth-link" routerLink="/forgot-password">Forgot password?</a>
+      </div>
+    </form>
+  </mat-card>
+</div>
