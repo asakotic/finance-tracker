@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { FormsModule, ReactiveFormsModule, AbstractControl } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Router, RouterLink} from '@angular/router';
 import { UserService } from '../../services/user-service';
 
 @Component({
-  selector: 'app-login',
-  standalone: true,
+  selector: 'app-register',
+  standalone: true, 
   imports: [
     MatCardModule,
     MatInputModule,
@@ -20,15 +20,15 @@ import { UserService } from '../../services/user-service';
     ReactiveFormsModule,
     RouterLink
   ],
-  templateUrl: './login.html',
-  styleUrls: ['./login.scss']
+  templateUrl: './register.html',
+  styleUrls: ['./register.scss']
 })
-export class Login {
-  loginForm: FormGroup;
-  loginError: string = '';
+export class Register {
+  registerForm: FormGroup;
+  registerError: string = '';
 
   constructor(private fb: FormBuilder, private userService: UserService, private router: Router) {
-    this.loginForm = this.fb.group({
+    this.registerForm = this.fb.group({
       username: ['', [
         Validators.required,
         Validators.minLength(3),
@@ -54,18 +54,16 @@ export class Login {
   }
 
   onSubmit() {
-    if (this.loginForm.valid) {
-      this.loginError = '';
-      const { username, password } = this.loginForm.value;
+    if (this.registerForm.valid) {
+      this.registerError = '';
+      const { username, password } = this.registerForm.value;
 
-      this.userService.login(username, password).subscribe({
+      this.userService.register(username, password).subscribe({
         next: (response) => {
-          localStorage.setItem('jwt', response.jwt);
-          this.userService.setLoginStatus(true);
-          this.router.navigate(['/products']);
+          this.router.navigate(['/login']);
         },
         error: (err) => {
-          this.loginError = err.error?.message || 'Login failed. Please try again.';
+          this.registerError = err.error?.message || 'Registration failed. Please try again.';
         }
       });
     }

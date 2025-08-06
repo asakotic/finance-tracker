@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
 import { Login} from './pages/login/login';
-import { Layout} from './pages/layout/layout';
 import { Dashboard } from './pages/dashboard/dashboard';
-// import { SettingsComponent } from './pages/settings/settings.component';
+import { Register } from './pages/register/register';
+import { Form } from './pages/form/form';
 
 export const routes: Routes = [
   {
@@ -15,26 +15,19 @@ export const routes: Routes = [
     component: Login
   },
   {
-    path: '',
-    component: Layout,
-    children: [
-      {
-        path: 'dashboard',
-        component: Dashboard
-      },
-      // {
-      //   path: 'settings',
-      //   component: SettingsComponent
-      // },
-      {
-        path: '',
-        redirectTo: 'dashboard',
-        pathMatch: 'full'
-      }
-    ]
+    path: 'form',
+    component: Form
+  },
+  {
+    path: 'register',
+    component: Register
   },
   {
     path: '**',
     redirectTo: 'login'
+  },
+  {
+    path: 'dashboard',
+    component: Dashboard
   }
 ];

@@ -1,9 +1,9 @@
-<mat-card class="login-card">
-    <mat-card-header class="login-header">
-        <mat-card-title>Welcome back!</mat-card-title>
+<mat-card class="register-card">
+    <mat-card-header class="register-header">
+        <mat-card-title>Welcome!</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
             <mat-form-field appearance="outline">
                 <mat-label>Username</mat-label>
                 <input matInput formControlName="username">
@@ -14,13 +14,13 @@
                 <input matInput formControlName="password" type="password">
             </mat-form-field>
 
-            <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid">
-                Login
+            <button mat-raised-button color="primary" type="submit" [disabled]="!registerForm.valid">
+                Register
             </button>
         </form>
     </mat-card-content>
-    <mat-card-actions class="register-link">
-        <span>Don't have an account? </span>
-        <a mat-button color="primary" routerLink="/register">Register here</a>
+    <mat-card-actions class="login-link">
+        <span>Already have an account? </span>
+        <a mat-button color="primary" routerLink="/login">Login here</a>
     </mat-card-actions>
 </mat-card>
