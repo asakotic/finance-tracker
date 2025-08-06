@@ -56,4 +56,19 @@ public class JwtUtil {
                 .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
     }
+
+    private String cleanToken(String token) {
+        return token.startsWith("Bearer ") ? token.substring(7) : token;
+    }
+
+    private Claims getAllClaims(String token) {
+        return Jwts.parser()
+                .setSigningKey(secret)
+                .parseClaimsJws(cleanToken(token))
+                .getBody();
+    }
+
+    public String extractUserUsername(String token) {
+        return getAllClaims(token).get("username", String.class);
+    }
 }

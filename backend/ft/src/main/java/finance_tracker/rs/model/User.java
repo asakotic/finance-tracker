@@ -25,6 +25,8 @@ public class User implements UserDetails {
     private UserRole role;
     @Column(nullable = false)
     private boolean enabled;
+    @Column(nullable = false)
+    private Double balance = 0.0;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
