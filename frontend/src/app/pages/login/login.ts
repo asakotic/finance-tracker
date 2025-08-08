@@ -62,10 +62,11 @@ export class Login {
         next: (response) => {
           localStorage.setItem('jwt', response.jwt);
           this.userService.setLoginStatus(true);
-          this.router.navigate(['/products']);
+          this.router.navigate(['/dashboard']);
         },
         error: (err) => {
           this.loginError = err.error?.message || 'Login failed. Please try again.';
+          alert("Username or password is incorrect.");
         }
       });
     }

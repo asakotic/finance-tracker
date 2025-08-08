@@ -60,10 +60,12 @@ export class Register {
 
       this.userService.register(username, password).subscribe({
         next: (response) => {
+          alert('Registration successful! You can now log in.');
           this.router.navigate(['/login']);
         },
         error: (err) => {
           this.registerError = err.error?.message || 'Registration failed. Please try again.';
+          alert("Something went wrong. Please try again.");
         }
       });
     }

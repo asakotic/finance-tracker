@@ -1,4 +1,8 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Category } from '../../models/category';
+import { CategoryService } from '../../services/category-service';
+import { TransactionService } from '../../services/transaction-service';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -8,11 +12,8 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import { Category } from '../../models/category';
-import { CategoryService } from '../../services/category-service';
-import { TransactionService } from '../../services/transaction-service';
 import { NgFor } from '@angular/common';
-import { Router } from '@angular/router';
+
 
 @Component({
   standalone: true,
@@ -28,23 +29,30 @@ import { Router } from '@angular/router';
     MatNativeDateModule,
     NgFor
   ],
-  selector: 'app-form',
-  templateUrl: './form.html',
-  styleUrls: ['./form.scss']
+  selector: 'app-edit-form',
+  templateUrl: './edit-form.html',
+  styleUrls: ['./edit-form.scss']
 })
-export class Form {
+export class EditForm {
   transactionType: 'income' | 'expense' = 'expense';
   amount: number | null = null;
   selectedCategory: Category | null = null;
   categories: Category[] = [];
-
   date: Date = new Date();
   time: string = this.formatTime(new Date());
 
-  constructor(private categoryService: CategoryService, private transactionService: TransactionService, private router: Router) { }
+  transactionId!: number;
+
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private categoryService: CategoryService,
+    private transactionService: TransactionService,
+  ) {}
 
   ngOnInit(): void {
-    this.loadCategories();
+    this.transactionId = Number(this.route.snapshot.paramMap.get('id'));
+    this.loadTransaction(this.transactionId);
   }
 
   formatTime(date: Date): string {
@@ -67,6 +75,20 @@ export class Form {
     });
   }
 
+  loadTransaction(id: number): void {
+    this.transactionService.getTransactionById(id).subscribe(tx => {
+      this.transactionType = tx.income ? 'income' : 'expense';
+      this.amount = tx.amount;
+      this.date = new Date(tx.date);
+      this.time = this.formatTime(new Date(tx.date));
+
+      this.categoryService.getCategories().subscribe(cats => {
+        this.categories = cats;
+        this.selectedCategory = cats.find(c => c.name === tx.category) || null;
+      });
+    });
+  }
+
   onTransactionTypeChange(): void {
     this.loadCategories();
     this.selectedCategory = null;
@@ -82,21 +104,19 @@ export class Form {
     }
   }
 
-  submitTransaction(): void {
+  updateTransaction(): void {
     const dateTime = this.getCombinedDateTime();
+
     if (this.amount && this.selectedCategory && dateTime) {
-      console.log({
-        amount: this.amount,
-        category: this.selectedCategory,
-        dateTime
-      });
-      this.transactionService.createTransaction({
+      const payload = {
         isIncome: this.transactionType === 'income',
         amount: this.amount,
         category: this.selectedCategory.name,
         date: dateTime.toISOString()
-      }).subscribe(() => {
-        alert('Transaction saved successfully.');
+      };
+
+      this.transactionService.updateTransaction(this.transactionId, payload).subscribe(() => {
+        alert('Transaction updated successfully.');
         this.router.navigate(['/dashboard']);
       });
     } else {

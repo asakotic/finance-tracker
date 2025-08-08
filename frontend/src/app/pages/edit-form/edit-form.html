@@ -1,5 +1,5 @@
 <mat-card class="transaction-card">
-    <h2>New Transaction</h2>
+    <h2>Edit Transaction</h2>
 
     <mat-button-toggle-group [(ngModel)]="transactionType" (change)="onTransactionTypeChange()">
         <mat-button-toggle value="expense">Expense</mat-button-toggle>
@@ -35,7 +35,7 @@
         <input matInput type="time" [(ngModel)]="time">
     </mat-form-field>
 
-    <button mat-raised-button color="primary" (click)="submitTransaction()">
-        Add
+    <button mat-raised-button color="primary" (click)="updateTransaction()">
+        Update
     </button>
 </mat-card>
