@@ -88,6 +88,7 @@ export class EditForm {
         this.categories = cats;
         this.selectedCategory = cats.find(c => c.name === tx.category) || null;
       });
+      
     });
   }
 

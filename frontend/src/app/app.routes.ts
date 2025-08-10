@@ -6,6 +6,7 @@ import { Form } from './pages/form/form';
 import { EditForm } from './pages/edit-form/edit-form';
 import { publicGuard } from './guards/public-guard';
 import { authGuard } from './guards/auth-guard-guard';
+import { Advice } from './pages/advice/advice';
 
 export const routes: Routes = [
   {
@@ -30,6 +31,10 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     component: Dashboard,
+  },
+  {
+    path: 'advices',
+    component: Advice,
   },
   {
     path: 'edit/:id',

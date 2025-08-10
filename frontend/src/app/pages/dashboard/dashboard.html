@@ -1,58 +1,164 @@
-<div class="financial-dashboard" style="display: flex; gap: 20px; flex-direction: column;">
+<div class="dashboard-container">
 
-  <button mat-raised-button color="primary" style="align-self: flex-start; margin-bottom: 12px;" (click)="addNewTransaction()">
-    <mat-icon>add</mat-icon>
-    Add New Transaction
-  </button>
+  <div class="dashboard-header">
+    <h1>Dashboard of Transactions</h1>
+    <button mat-raised-button color="primary" class="add-button" (click)="addNewTransaction()">
+      <mat-icon>add</mat-icon>
+      Add Transaction
+    </button>
+    <button mat-raised-button color="primary" class="add-button" (click)="goToAdvices()">
+      <mat-icon>lightbulb</mat-icon>
+      Advices
+    </button>
+  </div>
+  
+  <div class="summary-section">
+    <div class="summary-cards">
+      <div class="summary-card income-card">
+        <div class="card-header">
+          <mat-icon>trending_up</mat-icon>
+          <span>Total Income</span>
+        </div>
+        <div class="card-amount">{{ totalIncome | currency:'EUR':'symbol':'1.2-2' }}</div>
+      </div>
 
-  <div style="display: flex; gap: 20px;">
-    <div class="table-section" style="flex: 2;">
-      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" style="width: 100%;">
+      <div class="summary-card expense-card">
+        <div class="card-header">
+          <mat-icon>trending_down</mat-icon>
+          <span>Total Expenses</span>
+        </div>
+        <div class="card-amount">{{ totalExpenses | currency:'EUR':'symbol':'1.2-2' }}</div>
+      </div>
 
-        <ng-container matColumnDef="date">
-          <th mat-header-cell *matHeaderCellDef> Date </th>
-          <td mat-cell *matCellDef="let element"> {{ element.date | date:'short' }} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="category">
-          <th mat-header-cell *matHeaderCellDef> Category </th>
-          <td mat-cell *matCellDef="let element"> {{ element.category }} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="amount">
-          <th mat-header-cell *matHeaderCellDef> Amount </th>
-          <td mat-cell *matCellDef="let element" [class]="element.income ? 'income-amount' : 'expense-amount'">
-            {{ element.amount | currency:'EUR' }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="type">
-          <th mat-header-cell *matHeaderCellDef> Type </th>
-          <td mat-cell *matCellDef="let element">
-            {{ element.income ? 'Income' : 'Expense' }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef> Actions </th>
-          <td mat-cell *matCellDef="let element">
-            <button mat-icon-button color="primary" (click)="editTransaction(element.id)" aria-label="Edit transaction">
-              <mat-icon>edit</mat-icon>
-            </button>
-            <button mat-icon-button color="warn" (click)="deleteTransaction(element.id)" aria-label="Delete transaction">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-      </table>
+      <div class="summary-card balance-card" [ngClass]="{ 'positive': balance >= 0, 'negative': balance < 0 }">
+        <div class="card-header">
+          <mat-icon>account_balance_wallet</mat-icon>
+          <span>Balance</span>
+        </div>
+        <div class="card-amount">{{ balance | currency:'EUR':'symbol':'1.2-2' }}</div>
+      </div>
     </div>
 
-    <div class="chart-section" style="flex: 1;">
-      <canvas baseChart [data]="pieChartData" [options]="pieChartOptions" type="pie"></canvas>
+    <!-- Chart -->
+    <div class="chart-section">
+      <div class="chart-container">
+        <h3>Transactions by Category</h3>
+        <canvas baseChart [data]="pieChartData" [options]="pieChartOptions" type="pie"
+          *ngIf="pieChartData.labels && pieChartData.labels.length > 0">
+        </canvas>
+        <div class="no-data" *ngIf="!pieChartData.labels || pieChartData.labels.length === 0">
+          <mat-icon>pie_chart</mat-icon>
+          <p>No data available for display</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- filters -->
+  <div class="filters-section">
+    <div class="filters-container">
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Transaction Type</mat-label>
+        <mat-select [(value)]="filters.isIncome" (selectionChange)="onFilterChange()">
+          <mat-option [value]="null">All</mat-option>
+          <mat-option [value]="true">Income</mat-option>
+          <mat-option [value]="false">Expense</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Category</mat-label>
+        <mat-select [(value)]="filters.category" (selectionChange)="onFilterChange()">
+          <mat-option [value]="null">All Categories</mat-option>
+          <mat-option *ngFor="let category of availableCategories" [value]="category">
+            {{ category }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-stroked-button class="clear-filters"
+        (click)="filters = { isIncome: null, category: null }; onFilterChange()">
+        <mat-icon>clear</mat-icon>
+        Clear Filters
+      </button>
+    </div>
+  </div>
+
+  <div class="table-section">
+    <div class="table-container">
+      <mat-table [dataSource]="dataSource" matSort (matSortChange)="onSortChange($event)" class="transactions-table">
+
+        <!-- date -->
+        <ng-container matColumnDef="date">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Date</mat-header-cell>
+          <mat-cell *matCellDef="let transaction">
+            {{ transaction.date | date:'dd.MM.yyyy' }}
+          </mat-cell>
+        </ng-container>
+
+        <!-- category -->
+        <ng-container matColumnDef="category">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Category</mat-header-cell>
+          <mat-cell *matCellDef="let transaction">
+            <div class="category-cell">
+              <span class="category-name">{{ transaction.category }}</span>
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <!-- amount -->
+        <ng-container matColumnDef="amount">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Amount</mat-header-cell>
+          <mat-cell *matCellDef="let transaction">
+            <span class="amount" [ngClass]="{ 'income': transaction.income, 'expense': !transaction.income }">
+              {{ transaction.amount | currency:'EUR':'symbol':'1.2-2' }}
+            </span>
+          </mat-cell>
+        </ng-container>
+
+        <!-- type -->
+        <ng-container matColumnDef="type">
+          <mat-header-cell *matHeaderCellDef>Type</mat-header-cell>
+          <mat-cell *matCellDef="let transaction">
+            <span class="transaction-type"
+              [ngClass]="{ 'income-badge': transaction.income, 'expense-badge': !transaction.income }">
+              <mat-icon>{{ transaction.income ? 'trending_up' : 'trending_down' }}</mat-icon>
+              {{ transaction.income ? 'Income' : 'Expense' }}
+            </span>
+          </mat-cell>
+        </ng-container>
+
+        <!-- actions -->
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+          <mat-cell *matCellDef="let transaction">
+            <div class="action-buttons">
+              <button mat-icon-button color="primary" (click)="editTransaction(transaction.id)" matTooltip="Edit">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" (click)="deleteTransaction(transaction.id)" matTooltip="Delete">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <!-- header and row def -->
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;" class="transaction-row"></mat-row>
+      </mat-table>
+
+      <!-- no Data mess -->
+      <div class="no-transactions" *ngIf="dataSource.data.length === 0">
+        <mat-icon>receipt</mat-icon>
+        <h3>No Transactions</h3>
+        <p>Add new transaction to start tracking your finances.</p>
+      </div>
+
+      <!-- pagination -->
+      <mat-paginator [length]="totalElements" [pageSize]="size" [pageSizeOptions]="[5, 10, 20, 50]"
+        (page)="onPageChange($event)" showFirstLastButtons class="table-paginator">
+      </mat-paginator>
     </div>
   </div>
 

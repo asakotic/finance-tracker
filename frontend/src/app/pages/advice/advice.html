@@ -1,0 +1,136 @@
+<div class="advices-container">
+  <mat-card class="advice-card">
+    <mat-card-header>
+      <mat-card-title>Your Personalized Financial Insights</mat-card-title>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <!-- Financial Summary Section -->
+      <div class="summary-section">
+        <div class="summary-item income">
+          <div class="summary-icon">💰</div>
+          <div class="summary-label">Monthly Income</div>
+          <div class="summary-value">{{ monthlyIncome | currency }}</div>
+          <div class="summary-subtitle">Last 30 days</div>
+        </div>
+        
+        <div class="summary-item expenses">
+          <div class="summary-icon">💳</div>
+          <div class="summary-label">Monthly Expenses</div>
+          <div class="summary-value">{{ monthlyExpenses | currency }}</div>
+          <div class="summary-subtitle">Last 30 days</div>
+        </div>
+        
+        <div class="summary-item balance" [class]="getBalanceStatus()">
+          <div class="summary-icon" 
+               [innerHTML]="getBalanceStatus() === 'positive' ? '📈' : 
+                          getBalanceStatus() === 'negative' ? '📉' : '⚖️'">
+          </div>
+          <div class="summary-label">{{ getBalanceText() }}</div>
+          <div class="summary-value">{{ (monthlyIncome - monthlyExpenses) | currency }}</div>
+          <div class="summary-subtitle" *ngIf="savingsRate !== 0">
+            {{ savingsRate > 0 ? savingsRate.toFixed(1) + '% savings rate' : 'Overspending' }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Top Spending Categories -->
+      <div class="spending-breakdown" *ngIf="topSpendingCategories.length > 0">
+        <div class="breakdown-title">
+          🏆 Your Top Spending Categories
+        </div>
+        <div class="category-item" *ngFor="let category of topSpendingCategories; let i = index">
+          <div class="category-info">
+            <span class="category-emoji">{{ getCategoryEmoji(category.category) }}</span>
+            <span class="category-name">{{ category.category | titlecase }}</span>
+          </div>
+          <div class="category-details">
+            <span class="category-amount">{{ category.amount | currency }}</span>
+            <span class="category-percentage">({{ category.percentage.toFixed(1) }}%)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI-Powered Financial Advice -->
+      <div class="advice-section">
+        <div class="section-title">
+          🤖 Your AI Financial Coach Says...
+        </div>
+        <div class="advice-grid">
+          <div 
+            *ngFor="let advice of adviceMessages; trackBy: trackAdviceMessage" 
+            class="advice-message"
+            [class]="advice.type">
+            <p [innerHTML]="advice.text"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="quick-stats" *ngIf="monthlyExpenses > 0">
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-icon">📅</div>
+            <div class="stat-label">Daily Average</div>
+            <div class="stat-value">{{ dailyAverage | currency }}</div>
+          </div>
+          
+          <div class="stat-item" *ngIf="spendingTrend !== 0">
+            <div class="stat-icon" 
+                 [innerHTML]="spendingTrend > 0 ? '📈' : '📉'">
+            </div>
+            <div class="stat-label">Spending Trend</div>
+            <div class="stat-value" 
+                 [style.color]="spendingTrend > 0 ? '#ff5722' : '#4caf50'">
+              {{ spendingTrend > 0 ? '+' : '' }}{{ spendingTrend.toFixed(1) }}%
+            </div>
+          </div>
+          
+          <div class="stat-item" *ngIf="topSpendingCategories.length > 0">
+            <div class="stat-icon">🎯</div>
+            <div class="stat-label">Top Category</div>
+            <div class="stat-value">{{ topSpendingCategories[0].category | titlecase }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Financial Health Score -->
+      <div class="health-score" *ngIf="monthlyIncome > 0">
+        <div class="score-title">💎 Financial Health Score</div>
+        <div class="score-container">
+          <div class="score-circle">
+            <div class="score-number">
+              {{ getFinancialHealthScore() }}
+            </div>
+            <div class="score-label">/ 100</div>
+          </div>
+          <div class="score-description">
+            {{ getHealthScoreDescription() }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Motivational Quote -->
+      <div class="motivation-section">
+        <div class="quote-container">
+          <div class="quote-icon">💫</div>
+          <div class="quote-text">
+            "{{ getMotivationalQuote() }}"
+          </div>
+        </div>
+      </div>
+
+    </mat-card-content>
+    
+    <mat-card-actions>
+      <button mat-flat-button color="primary" (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+        Back to Dashboard
+      </button>
+      <button mat-stroked-button color="accent" (click)="generateNewAdvice()">
+        <mat-icon>refresh</mat-icon>
+        Refresh Insights
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
