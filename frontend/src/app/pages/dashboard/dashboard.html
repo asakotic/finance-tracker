@@ -1,1 +1,59 @@
-<p>dashboard works!</p>
+<div class="financial-dashboard" style="display: flex; gap: 20px; flex-direction: column;">
+
+  <button mat-raised-button color="primary" style="align-self: flex-start; margin-bottom: 12px;" (click)="addNewTransaction()">
+    <mat-icon>add</mat-icon>
+    Add New Transaction
+  </button>
+
+  <div style="display: flex; gap: 20px;">
+    <div class="table-section" style="flex: 2;">
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" style="width: 100%;">
+
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef> Date </th>
+          <td mat-cell *matCellDef="let element"> {{ element.date | date:'short' }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="category">
+          <th mat-header-cell *matHeaderCellDef> Category </th>
+          <td mat-cell *matCellDef="let element"> {{ element.category }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell *matHeaderCellDef> Amount </th>
+          <td mat-cell *matCellDef="let element" [class]="element.income ? 'income-amount' : 'expense-amount'">
+            {{ element.amount | currency:'EUR' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef> Type </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.income ? 'Income' : 'Expense' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef> Actions </th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-icon-button color="primary" (click)="editTransaction(element.id)" aria-label="Edit transaction">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="deleteTransaction(element.id)" aria-label="Delete transaction">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      </table>
+    </div>
+
+    <div class="chart-section" style="flex: 1;">
+      <canvas baseChart [data]="pieChartData" [options]="pieChartOptions" type="pie"></canvas>
+    </div>
+  </div>
+
+</div>

@@ -21,22 +21,19 @@ export const routes: Routes = [
   {
     path: 'form',
     component: Form,
-    canActivate: [publicGuard]
   },
   {
     path: 'register',
     component: Register,
-    canActivate: [authGuard]
+    canActivate: [publicGuard]
   },
   {
     path: 'dashboard',
     component: Dashboard,
-    canActivate: [authGuard]
   },
   {
     path: 'edit/:id',
     component: EditForm,
-    canActivate: [authGuard]
   },
   {
     path: '**',

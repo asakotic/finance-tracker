@@ -13,6 +13,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { NgFor } from '@angular/common';
+import { MatIcon } from '@angular/material/icon';
 
 
 @Component({
@@ -27,7 +28,8 @@ import { NgFor } from '@angular/common';
     MatCardModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    NgFor
+    NgFor,
+    MatIcon
   ],
   selector: 'app-edit-form',
   templateUrl: './edit-form.html',
@@ -48,7 +50,7 @@ export class EditForm {
     private router: Router,
     private categoryService: CategoryService,
     private transactionService: TransactionService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.transactionId = Number(this.route.snapshot.paramMap.get('id'));
@@ -102,6 +104,9 @@ export class EditForm {
         this.selectedCategory = newCat;
       });
     }
+  }
+  goBack() {
+    this.router.navigate(['/dashboard']);
   }
 
   updateTransaction(): void {

@@ -1,41 +1,47 @@
 <mat-card class="transaction-card">
-    <h2>Edit Transaction</h2>
 
-    <mat-button-toggle-group [(ngModel)]="transactionType" (change)="onTransactionTypeChange()">
-        <mat-button-toggle value="expense">Expense</mat-button-toggle>
-        <mat-button-toggle value="income">Income</mat-button-toggle>
-    </mat-button-toggle-group>
+  <button mat-icon-button aria-label="Back" (click)="goBack()" style="margin-bottom: 16px;">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
 
-    <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Amount</mat-label>
-        <input matInput type="number" [(ngModel)]="amount" />
-    </mat-form-field>
+  <h2>Edit Transaction</h2>
 
-    <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Category</mat-label>
-        <mat-select [(value)]="selectedCategory">
-            <mat-option *ngFor="let category of categories" [value]="category">
-                {{ category.name }}
-            </mat-option>
-            <mat-option (click)="addNewCategory()" class="add-new-category-option">
-                ➕ Add new category
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
+  <mat-button-toggle-group [(ngModel)]="transactionType" (change)="onTransactionTypeChange()">
+      <mat-button-toggle value="expense">Expense</mat-button-toggle>
+      <mat-button-toggle value="income">Income</mat-button-toggle>
+  </mat-button-toggle-group>
 
-    <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Date</mat-label>
-        <input matInput [matDatepicker]="picker" [(ngModel)]="date">
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
+  <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Amount</mat-label>
+      <input matInput type="number" [(ngModel)]="amount" />
+  </mat-form-field>
 
-    <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Time</mat-label>
-        <input matInput type="time" [(ngModel)]="time">
-    </mat-form-field>
+  <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Category</mat-label>
+      <mat-select [(value)]="selectedCategory">
+          <mat-option *ngFor="let category of categories" [value]="category">
+              {{ category.name }}
+          </mat-option>
+          <mat-option (click)="addNewCategory()" class="add-new-category-option">
+              ➕ Add new category
+          </mat-option>
+      </mat-select>
+  </mat-form-field>
 
-    <button mat-raised-button color="primary" (click)="updateTransaction()">
-        Update
-    </button>
+  <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Date</mat-label>
+      <input matInput [matDatepicker]="picker" [(ngModel)]="date">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Time</mat-label>
+      <input matInput type="time" [(ngModel)]="time">
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" (click)="updateTransaction()">
+      Update
+  </button>
+
 </mat-card>

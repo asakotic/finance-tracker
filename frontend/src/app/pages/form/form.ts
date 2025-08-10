@@ -13,6 +13,7 @@ import { CategoryService } from '../../services/category-service';
 import { TransactionService } from '../../services/transaction-service';
 import { NgFor } from '@angular/common';
 import { Router } from '@angular/router';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   standalone: true,
@@ -26,7 +27,8 @@ import { Router } from '@angular/router';
     MatCardModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    NgFor
+    NgFor,
+    MatIcon
   ],
   selector: 'app-form',
   templateUrl: './form.html',
@@ -102,5 +104,8 @@ export class Form {
     } else {
       alert('Fill all fields.');
     }
+  }
+    goBack() {
+    this.router.navigate(['/dashboard']);
   }
 }

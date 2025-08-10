@@ -1,0 +1,234 @@
+.financial-dashboard {
+    display: flex;
+    gap: 24px;
+    padding: 20px;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+
+    // Responsive design
+    @media (max-width: 768px) {
+        flex-direction: column;
+        gap: 16px;
+        padding: 16px;
+    }
+
+    .table-section {
+        flex: 2;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+        padding: 24px;
+        overflow: hidden;
+
+        // Enhance the Material table
+        .mat-elevation-z8 {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
+
+            // Header styling
+            .mat-header-row {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+                .mat-header-cell {
+                    color: white;
+                    font-weight: 600;
+                    font-size: 14px;
+                    letter-spacing: 0.5px;
+                    text-transform: uppercase;
+                    border-bottom: none;
+                }
+            }
+
+            // Row styling
+            .mat-row {
+                transition: all 0.2s ease;
+
+                &:nth-child(even) {
+                    background-color: #f8f9ff;
+                }
+
+                &:hover {
+                    background-color: #e3f2fd;
+                    transform: translateY(-1px);
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                }
+
+                .mat-cell {
+                    padding: 16px 12px;
+                    font-size: 14px;
+                    color: #2c3e50;
+                    border-bottom: 1px solid #ecf0f1;
+
+                    // Type column styling
+                    &:nth-child(4) {
+                        font-weight: 600;
+                    }
+                }
+            }
+        }
+
+        // Action button styling
+        .mat-icon-button {
+            transition: all 0.2s ease;
+
+            &:hover {
+                transform: scale(1.1);
+                box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
+            }
+
+            .mat-icon {
+                font-size: 20px;
+            }
+        }
+
+        // Amount styling based on type
+        .income-amount {
+            color: #27ae60;
+            font-weight: 600;
+
+            &::before {
+                content: '+';
+            }
+        }
+
+        .expense-amount {
+            color: #e74c3c;
+            font-weight: 600;
+
+            &::before {
+                content: '-';
+            }
+        }
+    }
+
+    .chart-section {
+        flex: 1;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        h3 {
+            margin: 0 0 20px 0;
+            color: #2c3e50;
+            font-size: 18px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        canvas {
+            max-width: 100%;
+            height: auto;
+            transition: all 0.3s ease;
+
+            &:hover {
+                transform: scale(1.02);
+            }
+        }
+
+        // Chart legend styling (if you add one)
+        .chart-legend {
+            margin-top: 16px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+
+            .legend-item {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                font-size: 12px;
+                color: #7f8c8d;
+
+                .legend-color {
+                    width: 12px;
+                    height: 12px;
+                    border-radius: 50%;
+                }
+            }
+        }
+    }
+}
+
+// Category badge styling (if you want to add badges)
+.category-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: capitalize;
+
+    &.food {
+        background-color: #fff3e0;
+        color: #f57c00;
+    }
+
+    &.transport {
+        background-color: #e8f5e8;
+        color: #388e3c;
+    }
+
+    &.entertainment {
+        background-color: #f3e5f5;
+        color: #7b1fa2;
+    }
+
+    &.utilities {
+        background-color: #e3f2fd;
+        color: #1976d2;
+    }
+
+    &.salary {
+        background-color: #e8f5e8;
+        color: #2e7d32;
+    }
+
+    &.freelance {
+        background-color: #fff8e1;
+        color: #f9a825;
+    }
+
+    &.default {
+        background-color: #f5f5f5;
+        color: #616161;
+    }
+}
+
+// Loading state
+.loading-state {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+    color: #7f8c8d;
+    font-style: italic;
+}
+
+// Empty state
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #7f8c8d;
+
+    .mat-icon {
+        font-size: 48px;
+        opacity: 0.5;
+        margin-bottom: 16px;
+    }
+
+    h4 {
+        margin: 0 0 8px 0;
+        font-weight: 500;
+    }
+
+    p {
+        margin: 0;
+        opacity: 0.8;
+    }
+}

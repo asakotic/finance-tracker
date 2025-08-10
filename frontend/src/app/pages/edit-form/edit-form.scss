@@ -2,13 +2,13 @@
   max-width: 420px;
   margin: 2rem auto;
   padding: 2.5rem;
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #f1f5f9 100%);
   border-radius: 24px;
   box-shadow: 
-    0 25px 50px rgba(15, 52, 96, 0.4),
-    0 12px 24px rgba(26, 26, 46, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+    0 25px 50px rgba(148, 163, 184, 0.15),
+    0 12px 24px rgba(100, 116, 139, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.2);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
@@ -20,7 +20,7 @@
     left: 0;
     right: 0;
     height: 2px;
-    background: linear-gradient(90deg, transparent, #00d4ff, #ff6b9d, transparent);
+    background: linear-gradient(90deg, transparent, #667eea, #764ba2, transparent);
     opacity: 0.6;
   }
 
@@ -31,7 +31,7 @@
     left: -50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(circle, rgba(0, 212, 255, 0.03) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(102, 126, 234, 0.03) 0%, transparent 70%);
     pointer-events: none;
     animation: subtle-glow 8s ease-in-out infinite;
   }
@@ -39,23 +39,22 @@
   &:hover {
     transform: translateY(-12px) scale(1.02);
     box-shadow: 
-      0 35px 70px rgba(15, 52, 96, 0.5),
-      0 20px 40px rgba(26, 26, 46, 0.4),
-      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      0 35px 70px rgba(148, 163, 184, 0.2),
+      0 20px 40px rgba(100, 116, 139, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.9);
   }
 
   h2 {
-    color: #ffffff;
+    color: #1e293b;
     font-size: 2rem;
     font-weight: 700;
     margin: 0 0 2rem 0;
     padding: 0.2rem 0;
     text-align: center;
-    background: linear-gradient(135deg, #00d4ff, #ff6b9d);
+    background: linear-gradient(135deg, #00c4dd, #0088aa);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    text-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
     line-height: 1.2;
   }
 
@@ -65,15 +64,15 @@
     margin-bottom: 2rem;
     border-radius: 16px;
     overflow: hidden;
-    background: rgba(255, 255, 255, 0.05);
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(248, 250, 252, 0.8);
+    box-shadow: inset 0 2px 4px rgba(148, 163, 184, 0.1);
+    border: 1px solid rgba(148, 163, 184, 0.2);
 
     mat-button-toggle {
       flex: 1;
       border: none;
       background: transparent;
-      color: rgba(255, 255, 255, 0.7);
+      color: rgba(71, 85, 105, 0.8);
       font-weight: 600;
       transition: all 0.3s ease;
       position: relative;
@@ -88,25 +87,25 @@
 
       // Expense (red theme)
       &[value="expense"].mat-button-toggle-checked {
-        background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+        background: linear-gradient(135deg, #ef4444, #dc2626);
         color: white;
         box-shadow: 
-          0 4px 15px rgba(255, 107, 107, 0.4),
+          0 4px 15px rgba(239, 68, 68, 0.3),
           inset 0 1px 0 rgba(255, 255, 255, 0.2);
       }
 
       // Income (green theme)
       &[value="income"].mat-button-toggle-checked {
-        background: linear-gradient(135deg, #51cf66, #40c057);
+        background: linear-gradient(135deg, #00d4aa, #00b894);
         color: white;
         box-shadow: 
-          0 4px 15px rgba(81, 207, 102, 0.4),
+          0 4px 15px rgba(0, 212, 170, 0.3),
           inset 0 1px 0 rgba(255, 255, 255, 0.2);
       }
 
       &:hover:not(.mat-button-toggle-checked) {
-        background: rgba(255, 255, 255, 0.1);
-        color: white;
+        background: rgba(148, 163, 184, 0.1);
+        color: #334155;
       }
 
       .mat-button-toggle-label-content {
@@ -127,80 +126,80 @@
   ::ng-deep mat-form-field {
     &.mat-form-field-appearance-outline {
       .mat-form-field-outline {
-        color: rgba(0, 212, 255, 0.3);
+        color: rgba(148, 163, 184, 0.4);
         border-width: 2px;
       }
 
       &.mat-focused .mat-form-field-outline-thick {
-        color: #00d4ff;
+        color: #667eea;
         border-width: 3px;
       }
 
       .mat-form-field-label {
-        color: rgba(255, 255, 255, 0.8);
+        color: rgba(71, 85, 105, 0.8);
         font-weight: 500;
       }
 
       &.mat-focused .mat-form-field-label {
-        color: #00d4ff;
+        color: #667eea;
       }
 
       input,
       mat-select {
-        color: white;
-        caret-color: #00d4ff;
+        color: #1e293b;
+        caret-color: #667eea;
         font-size: 1rem;
       }
 
       input::placeholder {
-        color: rgba(255, 255, 255, 0.5);
+        color: rgba(71, 85, 105, 0.5);
       }
     }
 
     .mat-form-field-infix {
-      background: rgba(255, 255, 255, 0.03);
+      background: rgba(248, 250, 252, 0.5);
       border-radius: 12px;
       backdrop-filter: blur(10px);
       transition: all 0.3s ease;
     }
 
     &.mat-focused .mat-form-field-infix {
-      background: rgba(0, 212, 255, 0.05);
+      background: rgba(102, 126, 234, 0.05);
     }
   }
 
   // Select dropdown styling
   ::ng-deep .mat-select-panel {
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
     backdrop-filter: blur(20px);
     border-radius: 16px;
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(0, 212, 255, 0.2);
+    box-shadow: 0 25px 50px rgba(148, 163, 184, 0.15);
+    border: 1px solid rgba(148, 163, 184, 0.2);
 
     .mat-option {
-      color: white;
+      color: #1e293b;
       transition: all 0.2s ease;
       font-weight: 500;
 
       &:hover {
-        background: rgba(0, 212, 255, 0.1);
-        color: #00d4ff;
+        background: rgba(102, 126, 234, 0.1);
+        color: #667eea;
       }
 
       &.mat-selected {
-        background: rgba(0, 212, 255, 0.2);
-        color: #00d4ff;
+        background: rgba(102, 126, 234, 0.15);
+        color: #667eea;
       }
 
       &.add-new-category-option {
-        color: #ff6b9d;
+        color: #764ba2;
         font-weight: 600;
-        border-top: 1px solid rgba(255, 107, 157, 0.2);
-        background: rgba(255, 107, 157, 0.05);
+        border-top: 1px solid rgba(118, 75, 162, 0.2);
+        background: rgba(118, 75, 162, 0.05);
 
         &:hover {
-          background: rgba(255, 107, 157, 0.15);
-          color: #ff6b9d;
+          background: rgba(118, 75, 162, 0.1);
+          color: #764ba2;
         }
       }
     }
@@ -209,11 +208,11 @@
   // Datepicker styling
   ::ng-deep mat-datepicker-toggle {
     .mat-icon-button {
-      color: rgba(255, 255, 255, 0.7);
+      color: rgba(71, 85, 105, 0.7);
 
       &:hover {
-        color: #00d4ff;
-        background: rgba(0, 212, 255, 0.1);
+        color: #667eea;
+        background: rgba(102, 126, 234, 0.1);
       }
     }
   }
@@ -223,13 +222,13 @@
     width: 100%;
     height: 56px;
     margin-top: 1.5rem;
-    background: linear-gradient(135deg, #00d4ff 0%, #0099cc 50%, #006699 100%);
+    background: linear-gradient(135deg, #00c4dd 0%, #0088aa 50%, #005577 100%);
     color: white;
     font-weight: 700;
     font-size: 1.1rem;
     border-radius: 16px;
     box-shadow: 
-      0 8px 25px rgba(0, 212, 255, 0.4),
+      0 8px 25px rgba(0, 196, 221, 0.4),
       inset 0 1px 0 rgba(255, 255, 255, 0.2);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     text-transform: uppercase;
@@ -251,9 +250,9 @@
     &:hover {
       transform: translateY(-3px);
       box-shadow: 
-        0 12px 35px rgba(0, 212, 255, 0.5),
+        0 12px 35px rgba(0, 196, 221, 0.5),
         inset 0 1px 0 rgba(255, 255, 255, 0.3);
-      background: linear-gradient(135deg, #00e4ff 0%, #00aadd 50%, #0077aa 100%);
+      background: linear-gradient(135deg, #00d4ee 0%, #0099bb 50%, #006688 100%);
 
       &::before {
         left: 100%;
@@ -318,16 +317,16 @@
     }
 
     &::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(148, 163, 184, 0.1);
       border-radius: 4px;
     }
 
     &::-webkit-scrollbar-thumb {
-      background: linear-gradient(135deg, #00d4ff, #0099cc);
+      background: linear-gradient(135deg, #667eea, #764ba2);
       border-radius: 4px;
 
       &:hover {
-        background: linear-gradient(135deg, #00e4ff, #00aadd);
+        background: linear-gradient(135deg, #7c3aed, #8b5cf6);
       }
     }
   }

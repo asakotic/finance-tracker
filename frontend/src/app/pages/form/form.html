@@ -1,4 +1,7 @@
 <mat-card class="transaction-card">
+    <button mat-icon-button aria-label="Back" (click)="goBack()" style="margin-bottom: 16px;">
+        <mat-icon>arrow_back</mat-icon>
+    </button>
     <h2>New Transaction</h2>
 
     <mat-button-toggle-group [(ngModel)]="transactionType" (change)="onTransactionTypeChange()">
