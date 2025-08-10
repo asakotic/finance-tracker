@@ -8,13 +8,18 @@ import finance_tracker.rs.model.dto.TransactionDto;
 import finance_tracker.rs.model.dto.TransactionFilter;
 import finance_tracker.rs.repository.TransactionRepository;
 import finance_tracker.rs.repository.UserRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +29,8 @@ public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public TransactionService(TransactionRepository transactionRepository, UserRepository userRepository, JwtUtil jwtUtil) {
         this.transactionRepository = transactionRepository;
@@ -44,16 +51,55 @@ public class TransactionService {
                 Sort.by(Sort.Direction.fromString(sortDirection), sortBy)
         );
 
-        return transactionRepository.findByFilters(
-                filter.isIncome(),
-                filter.startDate(),
-                filter.endDate(),
-                filter.minAmount(),
-                filter.maxAmount(),
-                filter.category(),
-                pageable
-        );
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Transaction> cq = cb.createQuery(Transaction.class);
+        Root<Transaction> root = cq.from(Transaction.class);
+
+        List<Predicate> predicates = new ArrayList<>();
+
+        if (filter.isIncome() != null) {
+            predicates.add(cb.equal(root.get("isIncome"), filter.isIncome()));
+        }
+        if (filter.startDate() != null) {
+            predicates.add(cb.greaterThanOrEqualTo(root.get("date"), filter.startDate()));
+        }
+        if (filter.endDate() != null) {
+            predicates.add(cb.lessThanOrEqualTo(root.get("date"), filter.endDate()));
+        }
+        if (filter.minAmount() != null) {
+            predicates.add(cb.greaterThanOrEqualTo(root.get("amount"), filter.minAmount()));
+        }
+        if (filter.maxAmount() != null) {
+            predicates.add(cb.lessThanOrEqualTo(root.get("amount"), filter.maxAmount()));
+        }
+        if (filter.category() != null && !filter.category().isEmpty()) {
+            predicates.add(cb.like(root.get("category"), "%" + filter.category() + "%"));
+        }
+
+        cq.where(predicates.toArray(new Predicate[0]));
+
+        if (sortDirection.equalsIgnoreCase("desc")) {
+            cq.orderBy(cb.desc(root.get(sortBy)));
+        } else {
+            cq.orderBy(cb.asc(root.get(sortBy)));
+        }
+
+        TypedQuery<Transaction> query = entityManager.createQuery(cq);
+
+        query.setFirstResult((int) pageable.getOffset());
+        query.setMaxResults(pageable.getPageSize());
+
+        List<Transaction> resultList = query.getResultList();
+
+        CriteriaQuery<Long> countQuery = cb.createQuery(Long.class);
+        Root<Transaction> countRoot = countQuery.from(Transaction.class);
+        countQuery.select(cb.count(countRoot));
+        countQuery.where(predicates.toArray(new Predicate[0]));
+        Long total = entityManager.createQuery(countQuery).getSingleResult();
+
+        return new PageImpl<>(resultList, pageable, total);
     }
+
 
     public Optional<Transaction> getTransactionById(Long id) {
         return transactionRepository.findById(id);
